@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* All section basic css */
+.component {
+  position: relative;
+  width: 100%;
+  min-height: calc(100dvh - 90px);
+  margin: 4rem 0 0 0;
+  padding: 1rem 1.5rem;
+  overflow-x: hidden;
+}
+
+/* Makes the charts responsive */
+canvas {
+  width: 100% !important;
+  min-width: 290px;
+  height: auto;
+}
+
+/* Modify padding for smartphone */
+@media screen and (max-width: 400px) {
+  .component {
+    padding: 20px 0 0 0;
+  }
+}
