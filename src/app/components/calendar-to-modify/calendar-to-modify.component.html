@@ -1,0 +1,194 @@
+<div
+  class="calendar w-full lg:w-auto flex flex-column justify-content-startalign-items-center shadow-2"
+>
+  <p-calendar
+    [style]="{ width: '100%' }"
+    [inputStyle]="{ width: '100%' }"
+    [(ngModel)]="selectedDate"
+    [showIcon]="true"
+    [inline]="isPrimeNgCalendarInline"
+    inputId="buttondisplay"
+    (onSelect)="onDateSelect($event)"
+    class="w-full"
+  ></p-calendar>
+  <full-calendar
+    [options]="calendarOptions"
+    class="relative w-full shadow-1 -z-1 calendar"
+    #fullCalendar
+  ></full-calendar>
+  <p-button label="New Event" [style]="{width: '100%'}" (onClick)="createEvent()"></p-button>
+
+  <!-- Schermata altri utenti per pagina di editing -->
+  <p-contextMenu id="cm" #cm [model]="items" appendTo="body" />
+
+  @if(eventDetails) {
+  <p-dialog
+    header="Event details"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [maximizable]="true"
+  >
+    <div>
+      <h2 class="m-0 text-green-300 text-center">Entry</h2>
+      <div class="mt-0 flex flex-column">
+        <div class="m-0">
+          <h2 class="m-0">Date: &nbsp;</h2>
+          <h3 class="m-0">{{ eventDetails.start.toLocaleString() }}</h3>
+        </div>
+        <div class="m-0">
+          <h2 class="m-0">Nfc Reader: &nbsp;</h2>
+          <h3 class="m-0">{{ startTitle }}</h3>
+        </div>
+      </div>
+
+      @if (endtitle.length > 5) {
+      <hr class="mt-3 mb-2" />
+      <h2 class="my-0 text-red-400 text-center">Exit</h2>
+      <div class="mt-0 flex flex-column">
+        <div class="m-0">
+          <h2 class="m-0">Date: &nbsp;</h2>
+          <h3 class="m-0">{{ eventDetails.end.toLocaleString() }}</h3>
+        </div>
+        <div class="m-0">
+          <h2 class="m-0">Nfc Reader: &nbsp;</h2>
+          <h3 class="m-0">
+            {{ endtitle.replace("<", "").replace("br", "").replace(">", "") }}
+          </h3>
+        </div>
+      </div>
+      } @else {
+      <h1 class="p-2 text-center text-white bg-blue-300">Ongoing</h1>
+      }
+    </div>
+  </p-dialog>
+  }
+
+  <p-dialog
+    [(visible)]="modifyEventDialog"
+    [style]="{ width: '450px', height: '30rem' }"
+    header="Edit event"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+  >
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="templatedisplay" class="block mb-2">Start Date</label>
+        <p-calendar
+          [(ngModel)]="newStartDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          [timeOnly]="true"
+          inputId="templatedisplay"
+        >
+          <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+            <i
+              class="pi pi-clock pointer-events-none pointer-events-none"
+              (click)="clickCallBack($event)"
+            ></i>
+          </ng-template>
+        </p-calendar>
+      </div>
+      <div class="field">
+        <label for="templatedisplay" class="block mb-2">End Date</label>
+        <p-calendar
+          [(ngModel)]="newEndDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          [timeOnly]="true"
+          inputId="templatedisplay"
+        >
+          <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+            <i
+              class="pi pi-clock pointer-events-none pointer-events-none"
+              (click)="clickCallBack($event)"
+            ></i>
+          </ng-template>
+        </p-calendar>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (click)="hideDialog()"
+      />
+      <p-button
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (click)="modifyEvent()"
+      />
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog
+    [(visible)]="createEventDialog"
+    [style]="{ width: '450px', height: '30rem' }"
+    header="Edit event"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+  >
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="templatedisplay" class="block mb-2">Start Date</label>
+        <p-calendar
+          [(ngModel)]="newStartDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          [timeOnly]="true"
+          inputId="templatedisplay"
+        >
+          <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+            <i
+              class="pi pi-clock pointer-events-none pointer-events-none"
+              (click)="clickCallBack($event)"
+            ></i>
+          </ng-template>
+        </p-calendar>
+      </div>
+      <div class="field">
+        <label for="templatedisplay" class="block mb-2">End Date</label>
+        <p-calendar
+          [(ngModel)]="newEndDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          [timeOnly]="true"
+          inputId="templatedisplay"
+        >
+          <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+            <i
+              class="pi pi-clock pointer-events-none pointer-events-none"
+              (click)="clickCallBack($event)"
+            ></i>
+          </ng-template>
+        </p-calendar>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (click)="hideDialog()"
+      />
+      <p-button
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (click)="saveEvent()"
+      />
+    </ng-template>
+  </p-dialog>
+</div>
+<p-confirmDialog />

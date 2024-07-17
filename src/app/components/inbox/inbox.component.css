@@ -1,0 +1,18 @@
+:host{
+  ::ng-deep .p-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+
+  :ng-deep .ng-star-inserted {
+    min-width: 290px;
+  }
+
+  @media screen and (max-width: 400px) {
+    ::ng-deep .p-card-body {
+      height: 100%;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+::ng-deep .p-card-content {
+  padding: 0 10px;
+}
+
+:host {
+  ::ng-deep .p-card-body {
+    width: 28rem;
+  }
+
+  @media screen and (max-width: 1340px) {
+    ::ng-deep .p-card-body {
+      position:relative;
+      width: 100% !important;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    ::ng-deep .p-card-body {
+      height: 100%;
+    }
+  }
+}

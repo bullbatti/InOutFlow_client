@@ -1,0 +1,65 @@
+@if(employee) {
+<section class="component">
+  <p-tabView>
+    <p-tabPanel [header]="headerTitle">
+      <div
+        class="relative w-full flex flex-column lg:flex-row gap-4 align-items-center justify-content-between"
+      >
+        <app-calendar-to-modify [employee]="employee" />
+
+        <div
+          class="w-full flex flex-column gap-4"
+          style="min-height: calc(100dvh - 210px)"
+        >
+          <div class="flex gap-4 flex-wrap justify-content-center">
+            <p-card header="Smart Card" class="w-22rem h-30rem flex flex-column justify-content-between" >
+              <ng-container *ngIf="!isEditing; else editTemplate">
+                <h1 class="m-0 mt-3" style="font-size: 3rem; height: 8rem; width: 21rem;">
+                  {{ smartCardId }}
+                </h1>
+              </ng-container>
+              <ng-template #editTemplate>
+                <div class="h-8rem mt-3">
+                <input
+                  pInputText
+                  [(ngModel)]="smartCardId"
+                  style="font-size: 3rem; width: 21rem;"
+                />
+                </div>
+              </ng-template>
+
+              <span
+                class="w-21rem flex justify-content-between align-items-center"
+              >
+                <div class="flex gap-3">
+                  @if (isEditing) {
+                  <p-button
+                    label="Cancel"
+                    size="small"
+                    (click)="exitEditing()"
+                    severity="secondary"
+                  ></p-button>
+
+                  <p-button
+                    label="Save"
+                    size="small"
+                    (click)="save()"
+                  ></p-button>
+                  }
+                </div>
+                <p-button
+                  label="Modify Smart Card"
+                  size="small"
+                  link="true"
+                  (click)="inEditing()"
+                  [disabled]="isEditing"
+                ></p-button>
+              </span>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</section>
+}

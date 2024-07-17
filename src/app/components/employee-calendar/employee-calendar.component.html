@@ -1,0 +1,65 @@
+@if(employee) {
+<div
+  class="calendar w-full lg:w-auto flex flex-column justify-content-start align-items-center shadow-2"
+>
+  <p-calendar
+    [style]="{ width: '100%' }"
+    [inputStyle]="{ width: '100%' }"
+    [(ngModel)]="selectedDate"
+    [showIcon]="true"
+    [inline]="true"
+    inputId="buttondisplay"
+    (onSelect)="onDateSelect($event)"
+    class="w-full"
+  ></p-calendar>
+  <full-calendar
+    [options]="calendarOptions"
+    class="relative w-full shadow-1 -z-1 calendar"
+    #fullCalendar
+  ></full-calendar>
+
+  @if(eventDetails) {
+  <p-dialog
+    header="Event details"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [maximizable]="true"
+  >
+    <div>
+      <h2 class="m-0 text-green-300 text-center">Entry</h2>
+      <div class="mt-0 flex flex-column">
+        <div class="m-0">
+          <h2 class="m-0">Date: &nbsp;</h2>
+          <h3 class="m-0">{{ eventDetails.start.toLocaleString() }}</h3>
+        </div>
+        <div class="m-0">
+          <h2 class="m-0">Nfc Reader: &nbsp;</h2>
+          <h3 class="m-0">{{ startTitle }}</h3>
+        </div>
+      </div>
+
+      @if (endtitle.length > 5) {
+      <hr class="mt-3 mb-2" />
+      <h2 class="my-0 text-red-400 text-center">Exit</h2>
+      <div class="mt-0 flex flex-column">
+        <div class="m-0">
+          <h2 class="m-0">Date: &nbsp;</h2>
+          <h3 class="m-0">{{ eventDetails.end.toLocaleString() }}</h3>
+        </div>
+        <div class="m-0">
+          <h2 class="m-0">Nfc Reader: &nbsp;</h2>
+          <h3 class="m-0">
+            {{ endtitle.replace("<", "").replace("br", "").replace(">", "") }}
+          </h3>
+        </div>
+      </div>
+      } @else {
+      <h1 class="p-2 text-center text-white bg-blue-300">Ongoing</h1>
+      }
+    </div>
+  </p-dialog>
+  }
+</div>
+}

@@ -1,0 +1,21 @@
+.calendar {
+  height: calc(100dvh - 100px);
+}
+
+@media screen and (max-height: 500px) {
+  .calendar {
+    height: calc(200dvh - 100px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    ::ng-deep .p-datepicker {
+      width: 350px;
+    }
+  }
+
+  .calendar {
+    width: 100%;
+  }
+}

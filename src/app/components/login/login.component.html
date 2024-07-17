@@ -1,0 +1,52 @@
+<section class="h-screen w-full flex justify-content-center align-items-center">
+  <app-information-message />
+
+  <div class="pb-8">
+    <h1 class="mb-3 text-center">Log in</h1>
+
+    <form [formGroup]="form" class="flex flex-column gap-2">
+      <!-- email -->
+      <div class="p-field flex flex-column gap-1">
+        <label for="email">Email</label>
+        <input type="text" id="email" formControlName="email" pInputText />
+        <small
+          *ngIf="
+            form.controls['email'].invalid &&
+            (form.controls['email'].dirty || form.controls['email'].touched)
+          "
+          class="p-error"
+          >Email is required</small
+        >
+      </div>
+
+      <!-- password -->
+      <div class="p-field flex flex-column gap-1">
+        <label for="password">Password</label>
+        <p-password
+          type="password"
+          id="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+        />
+        <small
+          *ngIf="
+            form.controls['password'].invalid &&
+            (form.controls['password'].dirty ||
+              form.controls['password'].touched)
+          "
+          class="p-error"
+          >Password is required</small
+        >
+      </div>
+
+      <p-button
+        type="submit"
+        [disabled]="form.invalid"
+        label="Log in"
+        class="p-button-primary w-auto"
+        (click)="onSubmit()"
+      ></p-button>
+    </form>
+  </div>
+</section>

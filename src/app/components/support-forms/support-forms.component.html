@@ -1,0 +1,73 @@
+<p-toast />
+<p-card>
+  <p-tabView>
+
+    <p-tabPanel header="Internal support">
+      <form [formGroup]="internalSupportForm" (ngSubmit)="onSubmit(internalSupportForm)">
+        <div class="p-fluid">
+          <div class="p-field">
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="emailAddress"
+              placeholder="Email"
+              required
+              class="mt-2"
+            />
+          </div>
+
+          <div class="p-field">
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="description"
+              rows="7"
+              placeholder="Describe your data problem"
+              required
+              class="mt-2"
+            ></textarea>
+          </div>
+
+          <div class="p-field mt-3">
+            <button pButton type="submit" label="Submit" size="small"></button>
+          </div>
+        </div>
+      </form>
+    </p-tabPanel>
+
+    <p-tabPanel header="Administrator support">
+      <form [formGroup]="administratorSupportForm" (ngSubmit)="onSubmit(administratorSupportForm)">
+        <div class="p-fluid">
+          <div class="p-field">
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="emailAddress"
+              placeholder="Email"
+              required
+              class="mt-2"
+            />
+          </div>
+
+          <div class="p-field">
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="description"
+              rows="7"
+              placeholder="Tell us what the technical problem is"
+              required
+              class="mt-2"
+            ></textarea>
+          </div>
+
+          <div class="p-field mt-3">
+            <button pButton type="submit" label="Submit" size="small"></button>
+          </div>
+        </div>
+      </form>
+    </p-tabPanel>
+  </p-tabView>
+</p-card>

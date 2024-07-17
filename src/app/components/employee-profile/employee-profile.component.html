@@ -1,0 +1,38 @@
+@if(employee) {
+
+<section class="component">
+  <div
+    class="relative h-full w-full flex flex-column lg:flex-row gap-4 align-items-center lg:align-items-start lg:justify-content-start"
+  >
+    <app-employee-calendar [employee]="employee" />
+
+    <div
+      class="w-full flex flex-column gap-4"
+      style="min-height: calc(100dvh - 100px)"
+    >
+      <!-- Charts container -->
+      <div class="flex gap-4 flex-wrap justify-content-between">
+        <!-- Pie chart -->
+        <app-pie-chart
+          class="relative flex-1 xl:flex-initial w-full form w-full"
+        ></app-pie-chart>
+        <!-- Bar chart -->
+        <app-bar-chart class="relative flex-1"></app-bar-chart>
+      </div>
+
+      @if(employee.accountType != "USER") {
+      <div class="flex gap-4 flex-wrap justify-content-between">
+        <div class="flex-1 xl:flex-initial w-full form">
+          <app-support-forms [employee]="employee" />
+        </div>
+        <div class="relative flex-1">
+          <app-inbox [company]="company" />
+        </div>
+      </div>
+      } @else {
+      <app-support-forms [employee]="employee" class="onlyUser" />
+      }
+    </div>
+  </div>
+</section>
+}

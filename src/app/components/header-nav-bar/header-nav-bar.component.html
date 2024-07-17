@@ -1,0 +1,123 @@
+@if(employee) {
+<p-confirmDialog />
+
+<!-- HEADER -->
+<p-menubar class="fixed top-0 left-0 w-full z-5">
+  <ng-template pTemplate="start">
+    <img src="/assets/logo.png" height="40" style="padding: 0 10px" />
+  </ng-template>
+  <ng-template pTemplate="end">
+    <p-button
+      (click)="isSidebarVisible = true"
+      icon="pi pi-bars"
+      text="true"
+    ></p-button>
+  </ng-template>
+</p-menubar>
+
+<!-- SIDEBAR -->
+<p-sidebar #sidebar [(visible)]="isSidebarVisible" position="right">
+  <ng-template pTemplate="headless">
+    <div class="flex flex-column h-full">
+      <!-- Logo, name and closing button -->
+      <div
+        class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0"
+      >
+        <span class="inline-flex align-items-center gap-2">
+          <img src="/assets/logo.png" alt="" class="w-2 h-2" />
+          <span class="font-semibold text-2xl text-primary">InOutFlow</span>
+        </span>
+        <span>
+          <p-button
+            type="button"
+            (click)="closeCallback($event)"
+            icon="pi pi-times"
+            rounded="true"
+            styleClass="h-2rem w-2rem"
+            text="true"
+          ></p-button>
+        </span>
+      </div>
+      <div class="h-full overflow-y-auto">
+        <div class="h-full flex flex-column justify-content-between">
+          <div>
+            <ul class="list-none p-0 m-0 overflow-hidden mt-3">
+              @for (item of sections; track $index) { @if ((employee && (item.id
+              === 1)) || ((item.id === 2) && employee.accountType !== USER) ||
+              ((item.id === 3) && employee.accountType === ADMIN)) {
+              <li>
+                <a
+                  pRipple
+                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple no-underline"
+                  [routerLink]="item.link"
+                  (click)="closeCallback($event)"
+                >
+                  <i [classList]="item.icon"></i>
+                  <span class="font-medium">{{ item.name }}</span>
+                </a>
+              </li>
+              }}
+            </ul>
+            <div class="w-full mt-3 flex-1">
+              <p-button
+                [outlined]="true"
+                class="flex justify-content-center"
+                [style]="{ width: 'calc(100% - 1rem)', margin: '0 0.5rem' }"
+                (onClick)="readNewSmartCard()"
+                >Read Smart Card</p-button
+              >
+            </div>
+          </div>
+
+          <div class="w-full text-center">
+            <p-button
+              (click)="logOut($event)"
+              label="Log out"
+              severity="danger"
+              [outlined]="true"
+              [style]="{ width: 'calc(100% - 1rem)', margin: '0 0.5rem' }"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mt-auto">
+        <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+        <a
+          pRipple
+          class="m-3 flex align-items-center cursor-pointer p-3 gap-4 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+        >
+          <p-avatar [image]="employee.image" shape="circle" />
+          <div class="flex flex-column">
+            <span class="font-bold"
+              >{{ employee.firstName }} {{ employee.lastName }}</span
+            >
+            <span>{{ employee.accountType }}</span>
+            <span>Account n. {{ employee.rollNumber }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</p-sidebar>
+
+<p-dialog
+  header="Id Reader"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [maximizable]="true"
+>
+  <p class="text-6xl font-bold text-center">
+    @if (textASmartCard.length == 0) {
+    <p-progressSpinner
+      styleClass="w-4rem h-4rem"
+      strokeWidth="4"
+      ariaLabel="loading"
+    ></p-progressSpinner>
+    }
+    {{ textASmartCard }}
+  </p>
+</p-dialog>
+<p-toast />
+}

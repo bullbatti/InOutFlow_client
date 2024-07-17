@@ -1,0 +1,371 @@
+@if(company) {
+<section class="componente mt-7 w-full" style="padding: 20px 10px">
+  <p-toast></p-toast>
+  <p-confirmDialog />
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        pRipple
+        severity="success"
+        label="New"
+        icon="pi pi-plus"
+        class="mr-2"
+        size="small"
+        (click)="openNew()"
+      />
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-button
+        pRipple
+        severity="danger"
+        label="Delete"
+        icon="pi pi-trash"
+        size="small"
+        [disabled]="!selectedEmployees || !selectedEmployees.length"
+        (onClick)="deleteSelectedEmployees($event)"
+      />
+    </ng-template>
+  </p-toolbar>
+  @if(employees.length > 0) {
+  <p-table
+    #dt
+    [value]="employees"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="[
+      'firstName',
+      'lastName',
+      'rollNumber',
+      'accountType'
+    ]"
+    [tableStyle]="{ width: '100%' }"
+    [(selection)]="selectedEmployees"
+    [rowHover]="true"
+    dataKey="rollNumber"
+    currentPageReportTemplate="{first} of {totalPages}"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div
+        class="flex align-items-center justify-content-between flex-wrap gap-3"
+      >
+        <span> All employees </span>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="onGlobalFilter($event)"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox />
+        </th>
+        <th pSortableColumn="firstName" style="min-width: 10rem">
+          First Name <p-sortIcon field="firstName" />
+        </th>
+        <th pSortableColumn="lastName" style="min-width: 9rem">
+          Last Name <p-sortIcon field="lastName" />
+        </th>
+        <th pSortableColumn="rollNumber" style="min-width: 10rem">
+          Roll Number <p-sortIcon field="rollNumber" />
+        </th>
+        <th pSortableColumn="accountType" style="min-width: 11rem">
+          Account Type <p-sortIcon field="accountType" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-dip>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="dip" onclick="event.stopPropagation()" />
+        </td>
+        <td>{{ dip.firstName }}</td>
+        <td>{{ dip.lastName }}</td>
+        <td>{{ dip.rollNumber }}</td>
+        <td>{{ dip.accountType }}</td>
+        <td class="flex">
+          <p-button
+            pRipple
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            severity="success"
+            size="small"
+            (click)="openEditEmployee($event, dip)"
+          />
+          <p-button
+            pRipple
+            icon="pi pi-trash"
+            severity="danger"
+            class="mr-2"
+            [rounded]="true"
+            size="small"
+            (click)="deleteEmployee($event, dip)"
+          />
+          <p-button
+            pRipple
+            icon="pi pi-eye"
+            [rounded]="true"
+            size="small"
+            (click)="routeEmployeeData(dip)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  } @else {
+  <p class="text-center">No Employee found</p>
+  }
+
+  <p-dialog
+    [(visible)]="newEmployeeDialog"
+    [style]="{ width: '450px' }"
+    header="New Employee"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+  >
+    <!-- FIRST NAME -->
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="firstName">First Name</label>
+        <input
+          type="text"
+          pInputText
+          id="firstName"
+          [(ngModel)]="newEmployee.firstName"
+          required
+          autofocus
+          placeholder="Insert first name"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.firstName">
+          First Name is required.
+        </small>
+      </div>
+
+      <!-- LAST NAME -->
+      <div class="field">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          pInputText
+          id="lastName"
+          [(ngModel)]="newEmployee.lastName"
+          required
+          autofocus
+          placeholder="Insert last name"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.lastName">
+          Last Name is required.
+        </small>
+      </div>
+
+      <!-- BIRTH DATE -->
+      <div class="field">
+        <label for="birthDate">Birth Date</label>
+        <p-calendar
+          [(ngModel)]="newEmployee.birthDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          inputId="icondisplay"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.birthDate">
+          BirthDate is required.
+        </small>
+      </div>
+
+      <!-- PHONE NUMBER -->
+      <div class="field">
+        <label for="phoneNumber">Phone Number</label>
+        <p-inputNumber
+          id="phoneNumber"
+          [(ngModel)]="newEmployee.phoneNumber"
+          mode="decimal"
+          inputId="withoutgrouping"
+          [useGrouping]="false"
+          prefix="+"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.phoneNumber">
+          Phone Number is required.
+        </small>
+      </div>
+
+      <!-- ACCOUNT TYPE -->
+      <div class="field">
+        <label for="accountType">Account Type</label>
+        <p-dropdown
+          [options]="accountTypes"
+          [(ngModel)]="newEmployee.accountType"
+          optionLabel="name"
+          optionValue="name"
+          placeholder="Select an Account Type"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.accountType">
+          Account Types is required.
+        </small>
+      </div>
+
+      <!-- EMAIL ADDRESS -->
+      <div class="field">
+        <label for="emailAddress">Email Address</label>
+        <input
+          type="email"
+          pInputText
+          id="emailAddress"
+          [(ngModel)]="newEmployee.emailAddress"
+          required
+          autofocus
+          placeholder="Insert email address"
+        />
+        <small class="p-error" *ngIf="submitted && !newEmployee.emailAddress">
+          Email Address is required.
+        </small>
+      </div>
+      <!-- SMART CARD NUMBER -->
+      <div class="field">
+        <label for="smartCard">Smart Card Number</label>
+        <input
+          type="text"
+          pInputText
+          id="smartCard"
+          [(ngModel)]="newEmployee.smartCardNumber"
+          required
+          autofocus
+          placeholder="Insert smart card number"
+        />
+        <small
+          class="p-error"
+          *ngIf="submitted && !newEmployee.smartCardNumber"
+        >
+          Smart Card Number is required.
+        </small>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (click)="hideDialog()"
+      />
+      <p-button
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (click)="saveEmployee(newEmployee)"
+      />
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog
+    [(visible)]="modifyDialog"
+    [style]="{ width: '450px' }"
+    header="Modify Employee"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+  >
+    <!-- FIRST NAME -->
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="firstName">First Name</label>
+        <input
+          type="text"
+          pInputText
+          id="firstName"
+          [(ngModel)]="employeeToModify.firstName"
+          required
+          autofocus
+          placeholder="Insert first name"
+        />
+        <small class="p-error" *ngIf="submitted && !employeeToModify.firstName">
+          First Name is required.
+        </small>
+      </div>
+
+      <!-- LAST NAME -->
+      <div class="field">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          pInputText
+          id="lastName"
+          [(ngModel)]="employeeToModify.lastName"
+          required
+          autofocus
+          placeholder="Insert last name"
+        />
+        <small class="p-error" *ngIf="submitted && !employeeToModify.lastName">
+          Last Name is required.
+        </small>
+      </div>
+
+      <!-- ACCOUNT TYPE -->
+      <div class="field">
+        <label for="accountType">Account Type</label>
+        <p-dropdown
+          [options]="accountTypes"
+          [(ngModel)]="employeeToModify.accountType"
+          optionLabel="name"
+          optionValue="name"
+          placeholder="Select an Account Type"
+        />
+        <small
+          class="p-error"
+          *ngIf="submitted && !employeeToModify.accountType"
+        >
+          Account Types is required.
+        </small>
+      </div>
+
+      <!-- EMAIL ADDRESS -->
+      <div class="field">
+        <label for="emailAddress">Email Address</label>
+        <input
+          type="email"
+          pInputText
+          id="emailAddress"
+          [(ngModel)]="employeeToModify.emailAddress"
+          required
+          autofocus
+          placeholder="Insert email address"
+        />
+        <small
+          class="p-error"
+          *ngIf="submitted && !employeeToModify.emailAddress"
+        >
+          Email Address is required.
+        </small>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (click)="hideDialog()"
+      />
+      <p-button
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (click)="modifyEmployee(employeeToModify)"
+      />
+    </ng-template>
+  </p-dialog>
+</section>
+}

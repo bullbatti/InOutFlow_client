@@ -1,0 +1,20 @@
+<p-card pTooltip="Last seven days data" tooltipPosition="bottom">
+  <div class="relative flex justify-content-center align-items-center">
+    @if (data) {
+    <p-chart
+      type="pie"
+      [data]="data"
+      [options]="options"
+      height="32dvh"
+      width="25rem"
+      style="cursor: pointer"
+    ></p-chart>
+    } @else {
+    <p-progressSpinner
+      styleClass="w-4rem h-4rem "
+      strokeWidth="8"
+      animationDuration=".5s"
+    />
+    }
+  </div>
+</p-card>

@@ -1,0 +1,10 @@
+:host {
+  ::ng-deep .p-card-body {
+    padding: 10px;
+    min-width: 25rem;
+  }
+
+  ::ng-deep .p-card-content {
+    padding: 0px;
+  }
+}

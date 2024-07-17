@@ -1,0 +1,31 @@
+<p-card header="Inbox">
+  @if (messages.length > 0) {
+  <div
+    style="
+      width: 100%;
+      min-width: 250px;
+      height: 20rem;
+      overflow: auto;
+      padding: 0 10px;
+    "
+  >
+    @for (m of messages; track $index) {
+    <app-message [message]="m" [loggedEmployeeCompany]="company" (refreshedList)="refreshList()" />
+    }
+    <p-scrollTop
+      target="parent"
+      styleClass="custom-scrolltop"
+      [threshold]="90"
+      icon="pi pi-arrow-up"
+    />
+  </div>
+  } @else {
+  <div class="flex h-20rem justify-content-center align-items-center">
+    <p-progressSpinner
+      styleClass="w-4rem h-4rem "
+      strokeWidth="8"
+      animationDuration=".5s"
+    />
+  </div>
+  }
+</p-card>

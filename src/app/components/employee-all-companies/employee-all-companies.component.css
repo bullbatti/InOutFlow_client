@@ -1,0 +1,4 @@
+td {
+  text-overflow: clip;
+  text-wrap: nowrap;
+}

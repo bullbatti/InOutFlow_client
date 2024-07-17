@@ -1,0 +1,47 @@
+<div
+  class="h-4rem w-full shadow-4 my-3 px-2 flex justify-content-start align-items-center overflow-hidden"
+  style="cursor: pointer"
+  (click)="openDialog()"
+>
+  <p-avatar
+    [image]="message.senderImage"
+    styleClass="mr-3"
+    size="large"
+    shape="circle"
+  />
+  <div>
+    <h3 class="m-0">{{ message.senderMail }}</h3>
+    <p class="m-0">{{ message.type }}</p>
+  </div>
+</div>
+
+<p-dialog
+  header="Support Type"
+  [draggable]="false"
+  [maximizable]="true"
+  [resizable]="true"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <p-avatar [image]="message.senderImage" shape="circle" />
+      <span class="font-bold white-space-nowrap">
+        {{ message.senderMail }} <br />
+        {{ message.type }}
+      </span>
+    </div>
+  </ng-template>
+  <p>{{ message.description }}</p>
+
+  <ng-template pTemplate="footer">
+    <div class="w-full flex justify-content-between align-items-center">
+      <p-button [outlined]="true" size="small" [severity]="'success'" (onClick)="markAsCompleted($event)">Mask as done</p-button>
+      <p-button size="small" (onClick)="viewProfile()">View profile</p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmPopup />
+<p-toast />

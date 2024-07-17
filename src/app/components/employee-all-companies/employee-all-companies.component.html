@@ -1,0 +1,316 @@
+<section class="componente mt-7 w-full" style="padding: 20px 10px">
+  <p-toast></p-toast>
+  <p-confirmDialog />
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        pRipple
+        severity="success"
+        label="New"
+        icon="pi pi-plus"
+        class="mr-2"
+        size="small"
+        (onClick)="openNew()"
+      />
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-button
+        pRipple
+        severity="danger"
+        label="Delete"
+        icon="pi pi-trash"
+        size="small"
+        [disabled]="!selectedCompanies || !selectedCompanies.length"
+        (onClick)="deleteSelectedCompanies($event)"
+      />
+    </ng-template>
+  </p-toolbar>
+  @if (companies.length > 0) {
+  <p-table
+    #dt
+    [value]="companies"
+    [rows]="7"
+    [paginator]="true"
+    [globalFilterFields]="[
+      'firstName',
+      'lastName',
+      'rollNumber',
+      'accountType'
+    ]"
+    [tableStyle]="{ width: '100%' }"
+    [(selection)]="selectedCompanies"
+    [rowHover]="true"
+    dataKey="emailAddress"
+    currentPageReportTemplate="{first} of {totalPages}"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div
+        class="flex align-items-center justify-content-between flex-wrap gap-3"
+      >
+        <span> All Companies </span>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="onGlobalFilter($event)"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox />
+        </th>
+        <th
+          pSortableColumn="businessName"
+          style="min-width: 10rem; overflow: hidden"
+        >
+          Business Name <p-sortIcon field="businessName" />
+        </th>
+        <th pSortableColumn="officeAddress" style="min-width: 9rem">
+          Office Address <p-sortIcon field="officeAddress" />
+        </th>
+        <th pSortableColumn="phoneNumber" style="min-width: 11rem">
+          Phone Number <p-sortIcon field="phoneNumber" />
+        </th>
+        <th pSortableColumn="emailAddress" style="max-width: 11rem">
+          Email Address <p-sortIcon field="emailAddress" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-com>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="com" onclick="event.stopPropagation()" />
+        </td>
+        <td>{{ com.businessName }}</td>
+        <td>{{ com.officeAddress }}</td>
+        <td>{{ com.phoneNumber }}</td>
+        <td>{{ com.emailAddress }}</td>
+        <td class="flex">
+          <p-button
+            pRipple
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            severity="success"
+            size="small"
+            (onClick)="modify(com)"
+          />
+          <p-button
+            pRipple
+            icon="pi pi-trash"
+            severity="danger"
+            class="mr-2"
+            [rounded]="true"
+            size="small"
+            (onClick)="deleteComapny(com, $event)"
+          />
+          <p-button
+            pRipple
+            icon="pi pi-eye"
+            [rounded]="true"
+            size="small"
+            (onClick)="routeCompanyData(com)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  } @else {
+  <p class="text-center">No Company found</p>
+  }
+</section>
+
+<p-dialog
+  [(visible)]="companyDialog"
+  [style]="{ width: '450px' }"
+  header="New Company"
+  [modal]="true"
+  styleClass="p-fluid"
+  [draggable]="false"
+>
+  <!-- BUSINESS NAME -->
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="businessName">Business Name</label>
+      <input
+        type="text"
+        pInputText
+        id="businessName"
+        [(ngModel)]="newCompany.businessName"
+        required
+        autofocus
+        placeholder="Insert business name"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.businessName">
+        Business Name is required.
+      </small>
+    </div>
+
+    <!-- OFFICE ADDRESS -->
+    <div class="field">
+      <label for="officeAddress">Office Address</label>
+      <input
+        type="text"
+        pInputText
+        id="officeAddress"
+        [(ngModel)]="newCompany.officeAddress"
+        required
+        autofocus
+        placeholder="Insert office address"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.officeAddress">
+        Office address is required.
+      </small>
+    </div>
+
+    <!-- PHONE NUMBER -->
+    <div class="field">
+      <label for="phoneNumber">Phone Number</label>
+      <p-inputNumber
+        id="phoneNumber"
+        [(ngModel)]="newCompany.phoneNumber"
+        mode="decimal"
+        inputId="withoutgrouping"
+        [useGrouping]="false"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.phoneNumber">
+        Phone Number is required.
+      </small>
+    </div>
+
+    <div class="field">
+      <label for="emailAddress">Email Address</label>
+      <input
+        type="text"
+        pInputText
+        id="emailAddress"
+        [(ngModel)]="newCompany.emailAddress"
+        required
+        autofocus
+        placeholder="Insert email address"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.emailAddress">
+        Email address is required.
+      </small>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      [text]="true"
+      (click)="hideDialog()"
+    />
+    <p-button
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      [text]="true"
+      (onClick)="saveCompany(newCompany)"
+    />
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="companyModifyDialog"
+  [style]="{ width: '450px' }"
+  header="Edit Company"
+  [modal]="true"
+  styleClass="p-fluid"
+  [draggable]="false"
+>
+  <!-- BUSINESS NAME -->
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="businessName">Business Name</label>
+      <input
+        type="text"
+        pInputText
+        id="businessName"
+        [(ngModel)]="newCompany.businessName"
+        required
+        autofocus
+        placeholder="Insert business name"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.businessName">
+        Business Name is required.
+      </small>
+    </div>
+
+    <!-- OFFICE ADDRESS -->
+    <div class="field">
+      <label for="officeAddress">Office Address</label>
+      <input
+        type="text"
+        pInputText
+        id="officeAddress"
+        [(ngModel)]="newCompany.officeAddress"
+        required
+        autofocus
+        placeholder="Insert office address"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.officeAddress">
+        Office address is required.
+      </small>
+    </div>
+
+    <!-- PHONE NUMBER -->
+    <div class="field">
+      <label for="phoneNumber">Phone Number</label>
+      <p-inputNumber
+        id="phoneNumber"
+        [(ngModel)]="newCompany.phoneNumber"
+        mode="decimal"
+        inputId="withoutgrouping"
+        [useGrouping]="false"
+        prefix="+"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.phoneNumber">
+        Phone Number is required.
+      </small>
+    </div>
+
+    <div class="field">
+      <label for="emailAddress">Email Address</label>
+      <input
+        type="text"
+        pInputText
+        id="emailAddress"
+        [(ngModel)]="newCompany.emailAddress"
+        required
+        autofocus
+        placeholder="Insert email address"
+      />
+      <small class="p-error" *ngIf="submitted && !newCompany.emailAddress">
+        Email address is required.
+      </small>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      [text]="true"
+      (click)="hideDialog()"
+    />
+    <p-button
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      [text]="true"
+      (onClick)="modifyCompany(newCompany)"
+    />
+  </ng-template>
+</p-dialog>
