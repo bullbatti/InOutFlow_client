@@ -20,6 +20,8 @@
     "@angular/router": "^17.3.0",
     "@fullcalendar/angular": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "chart.js": "^4.4.3",
+    "primeicons": "^7.0.0",
     "primeng": "^17.18.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

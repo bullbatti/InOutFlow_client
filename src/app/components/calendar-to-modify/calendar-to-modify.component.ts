@@ -301,13 +301,13 @@ export class CalendarToModifyComponent {
       .modifyEvent(this.oldTracking, this.newTracking, this.employee)
       .subscribe({
         next: () => {
+          this.getEventsByDate(this.selectedDate);
           this.modifyEventDialog = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Event data modified successfully',
           });
-          this.getEventsByDate(this.selectedDate);
         },
         error: (err: Error) => {
           console.log(err);
@@ -336,13 +336,13 @@ export class CalendarToModifyComponent {
       .createEvent(this.newTracking, this.employee)
       .subscribe({
         next: () => {
+          this.getEventsByDate(this.selectedDate);
           this.createEventDialog = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Event data modified successfully',
           });
-          this.getEventsByDate(this.selectedDate);
         },
         error: (err: Error) => {
           console.log(err);
