@@ -8,6 +8,7 @@ import { supportGuard } from './guards/support.guard';
 import { EmployeeToModifyComponent } from './components/employee-to-modify/employee-to-modify.component';
 import { EmployeeAllCompaniesComponent } from './components/employee-all-companies/employee-all-companies.component';
 import { CompanyToModifyComponent } from './components/company-to-modify/company-to-modify.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 
 export const routes: Routes = [
@@ -17,8 +18,13 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: 'home',
+    title: 'InOutFlow',
+    component: HomePageComponent,
+  },
+  {
     path: '',
-    redirectTo: '/login',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {

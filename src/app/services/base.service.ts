@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class BaseService {
-  BASEURL: string = 'http://localhost:8080/api';
+  BASEURL: string = 'http://localhost:8080/inoutflow/api';
 
   constructor() {}
 
