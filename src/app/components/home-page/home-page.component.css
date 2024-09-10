@@ -6,51 +6,46 @@ a.action {
   text-decoration: none;
 }
 
-.centered {
-  border-left: solid 5px black;
-  border-right: solid 5px black;
-}
-
-.action
- {
+.action {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: .5s;
+  transition: 0.5s;
   flex: 1;
- }
+}
 
- #boh {
-  background-image: url('../../../assets/undraw_Responsive_re_e1nn.png');
+.link-container {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
- }
+  width: 100%;
+  height: 100%;
+}
 
- #boh1 {
-  background-image: url('../../../assets/undraw_server_cluster_jwwq.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
- }
+#front-end {
+  background-image: url("../../../assets/undraw_Responsive_re_e1nn.png");
+}
 
- #boh2 {
-  background-image: url('../../../assets/undraw_Sign_up_n6im.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
- }
+#back-end {
+  background-image: url("../../../assets/undraw_server_cluster_jwwq.png");
+}
 
- .action p {
+#log-in {
+  background-image: url("../../../assets/undraw_Sign_up_n6im.png");
+}
+
+.action p {
   width: 80%;
   padding: 20px 0;
   text-align: center;
   color: white;
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0, 0.7); /* Black w/opacity/see-through */
- }
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.7); /* Black w/opacity/see-through */
+}
 
- .action:hover {
-  flex:  2;
-  transition: .5s;
- }
+@media (hover: hover) {
+  .action:hover {
+    flex: 2;
+    transition: 0.5s;
+  }
+}
